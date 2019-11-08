@@ -5,25 +5,29 @@
   "projects": {
     "telephony-webapp": {
       "root": "",
-      "sourceRoot": "src",
+      "sourceRoot": "src/presentation",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "css"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/telephony-webapp",
-            "index": "src/index.html",
-            "main": "src/main.ts",
+            "index": "src/presentation/index.html",
+            "main": "src/presentation/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "src/presentation/favicon.ico",
+              "src/presentation/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/presentation/styles.css"
             ],
             "scripts": [],
             "es5BrowserSupport": true
@@ -75,17 +79,17 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
+            "main": "src/presentation/test.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.css"
+              "src/presentation/styles.css"
             ],
             "scripts": [],
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "src/presentation/favicon.ico",
+              "src/presentation/assets"
             ]
           }
         },
