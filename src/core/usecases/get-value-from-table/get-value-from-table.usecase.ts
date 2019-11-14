@@ -29,7 +29,7 @@ export class GetValueFromTableUseCase implements UseCase<GetValueFromTableComman
             default:
             case OutputParam.Traffic:
                 let outputTraffic : number;
-                for(let a = 0; a < 165.0; a += 0.0001){
+                for(let a = 0; a < 165.0; a += 0.0004){
                     gradeOfSerivce = await usedFunction(params.numberOfTrunks, a);
                     if( Math.abs(gradeOfSerivce - params.gradeOfService) < 0.000001) {
                         outputTraffic = a;

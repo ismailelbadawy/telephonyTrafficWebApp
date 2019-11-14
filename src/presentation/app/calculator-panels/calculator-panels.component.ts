@@ -4,6 +4,8 @@ import { OutputParam, ErlangFormula, GetValueFromTableCommand } from "../../../c
 import { GetValueFromTableUseCase } from 'src/core/usecases/get-value-from-table/get-value-from-table.usecase';
 import { GetValueFromTableViewModel } from "src/core/usecases/get-value-from-table/get-value-from-table.viewmodel";
 import { ITelephonyCalculator } from 'src/core/calculators/telephony.calculator';
+import { GetTableFromParamsUseCase } from 'src/core/usecases/get-table-from-params/get-table-from-params.usecase';
+import { GetTableFromParamsCommand } from 'src/core/usecases/get-table-from-params/get-table-from-params.command';
 
 @Component({
   selector: 'calculator-panels',
@@ -27,8 +29,15 @@ export class CalculatorPanelsComponent implements OnInit, OnChanges {
 
   usecase: GetValueFromTableUseCase;
 
+  fullTableUseCase : GetTableFromParamsUseCase;
+  customTableUseCase : GetTableFromParamsUseCase;
+
+  isLoadingFullTable : boolean;
+
   constructor(private _caluclator: ITelephonyCalculator) {
     this.usecase = new GetValueFromTableUseCase(this._caluclator);
+    this.fullTableUseCase = new GetTableFromParamsUseCase(new GetValueFromTableUseCase(this._caluclator));
+    this.fullTableUseCase = new GetTableFromParamsUseCase(new GetValueFromTableUseCase(this._caluclator));
   }
 
   ngOnInit() {
@@ -69,5 +78,18 @@ export class CalculatorPanelsComponent implements OnInit, OnChanges {
             break;
         }
       })
+  }
+
+  async getFullTable() {
+    this.isLoadingFullTable = true;
+    
+    this.fullTableUseCase.execute(
+      new GetTableFromParamsCommand(
+        ErlangFormula.ErlangB, 
+        [0.01, 0.05, 0.1, 0.5, 1.0, 2, 5, 10, 15, 20, 30, 40], 
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])).then((response) => {
+          this.isLoadingFullTable = false;
+          console.log(response);
+        });
   }
 }
