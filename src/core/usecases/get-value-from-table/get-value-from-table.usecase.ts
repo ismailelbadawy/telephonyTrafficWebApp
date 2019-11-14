@@ -52,6 +52,6 @@ export class GetValueFromTableUseCase implements UseCase<GetValueFromTableComman
     }
 
     constructor(private _trafficFormulaCalculator : ITelephonyCalculator) {
-
+        
     }
 }

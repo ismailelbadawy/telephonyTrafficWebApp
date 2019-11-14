@@ -1,0 +1,70 @@
+<mat-accordion class="example-headers-align">
+  <mat-expansion-panel hideToggle>
+
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Single Value Calculator
+      </mat-panel-title>
+      <mat-icon>keyboard_arrow_down</mat-icon>
+    </mat-expansion-panel-header>
+
+    <mat-form-field class="standard-form-field drop-down-wide">
+      <mat-label>Choose your output</mat-label>
+      <mat-select (valueChange)='executeUseCase()' [(value)]="outputType">
+        <mat-option value="GoS">Grade of Service</mat-option>
+        <mat-option value="A">Traffic</mat-option>
+        <mat-option value="N">Number of trunks</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="outputType != 'A'" class="standard-form-field">
+      <input matInput placeholder="Traffic" type="number" [formControl]='trafficFormControl'>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="outputType != 'N'" class="standard-form-field">
+      <input matInput type="number" min="1" max="100" placeholder="Number of Trunks"
+        [formControl]='numberOfTrunksFromControl'>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="outputType != 'GoS'" class="standard-form-field">
+      <input matInput type="number" placeholder="Grade of Service in %" [formControl]='gradeOfServiceFormControl'>
+    </mat-form-field>
+
+    <mat-form-field class="standard-form-field drop-down-wide">
+      <mat-label>Choose your traffic formula</mat-label>
+      <mat-select (valueChange)='executeUseCase()' [(value)]="formula">
+        <mat-option value="ErlangB">Erlang B</mat-option>
+        <mat-option value="ErlangC">Erlang C</mat-option>
+        <mat-option value="Poisson">Poisson</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br/>
+    <button (click)='executeUseCase();' mat-button>Calculate</button>
+    <h4>{{outputValue}}</h4>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Full Table
+      </mat-panel-title>
+      <mat-icon>keyboard_arrow_down</mat-icon>
+    </mat-expansion-panel-header>
+
+    <mat-form-field>
+      <input matInput placeholder="Country">
+    </mat-form-field>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Customized Table
+      </mat-panel-title>
+      <mat-icon>keyboard_arrow_down</mat-icon>
+    </mat-expansion-panel-header>
+    <mat-action-row>
+
+    </mat-action-row>
+  </mat-expansion-panel>
+
+</mat-accordion>
