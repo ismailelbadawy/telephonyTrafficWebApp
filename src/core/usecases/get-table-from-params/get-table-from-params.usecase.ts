@@ -6,22 +6,23 @@ import { GetValueFromTableCommand, OutputParam } from '../get-value-from-table/g
 
 export class GetTableFromParamsUseCase implements UseCase<GetTableFromParamsCommand, GetTableFromParamsViewModel> {
 
-    async execute(params: GetTableFromParamsCommand): Promise<GetTableFromParamsViewModel> {
+    execute(params: GetTableFromParamsCommand): Promise<GetTableFromParamsViewModel> {
         console.log('Started calculation');
-        let rows : TrafficViewItem[] = [];
-        for (let gos of params.gosValues) {
-            let trafficRow = new TrafficViewItem([]);
-            for (let trunk of params.trunkValues) {
-                let trafficValue = await this._getOneTrafficValue.execute(new GetValueFromTableCommand(params.trafficFormula, 
-                    OutputParam.Traffic, null, 
-                    trunk, null, gos/ 100));
-                console.log(`Traffic value : ${trafficValue} for GoS : ${gos} and trunk : ${trunk}`);
-                trafficRow.trafficValues.push(trafficValue.overallTraffic);
+        return new Promise(async (resolve, reject) => {
+            let rows: TrafficViewItem[] = [];
+            for (let i = 0; i < params.trunkValues.length; i++) {
+                let trafficRow = new TrafficViewItem([]);
+                for (let j = 0; j < params.gosValues.length; j++) {
+                    let trafficValue = await this._getOneTrafficValue.execute(new GetValueFromTableCommand(params.trafficFormula,
+                        OutputParam.Traffic, null,
+                        params.trunkValues[i], null, params.gosValues[j]/ 100));
+                    trafficRow.trafficValues.push(trafficValue.overallTraffic);
+                }
+                console.log(`Row ${i} : ${trafficRow}`);
+                rows.push(trafficRow);
             }
-            console.log(`For GoS : ${gos} traffic : ${trafficRow.trafficValues}`);
-            rows.push(trafficRow);
-        }
-        return new GetTableFromParamsViewModel(rows);
+            resolve(new GetTableFromParamsViewModel(rows));
+        });
     }
 
     constructor(private _getOneTrafficValue: GetValueFromTableUseCase) {

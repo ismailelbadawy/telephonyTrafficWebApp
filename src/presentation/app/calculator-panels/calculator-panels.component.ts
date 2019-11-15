@@ -6,6 +6,7 @@ import { GetValueFromTableViewModel } from "src/core/usecases/get-value-from-tab
 import { ITelephonyCalculator } from 'src/core/calculators/telephony.calculator';
 import { GetTableFromParamsUseCase } from 'src/core/usecases/get-table-from-params/get-table-from-params.usecase';
 import { GetTableFromParamsCommand } from 'src/core/usecases/get-table-from-params/get-table-from-params.command';
+import { GetTableFromParamsViewModel } from 'src/core/usecases/get-table-from-params/get-table-from-params.viewmodel';
 
 @Component({
   selector: 'calculator-panels',
@@ -21,7 +22,7 @@ export class CalculatorPanelsComponent implements OnInit, OnChanges {
   formula: string;
   outputType: string;
 
-  numberOfTrunksFromControl = new FormControl('', [Validators.min(1) , Validators.max(100)]);
+  numberOfTrunksFromControl = new FormControl('', [Validators.min(1), Validators.max(100)]);
   trafficFormControl = new FormControl('', [Validators.min(1), Validators.max(100)]);
   gradeOfServiceFormControl = new FormControl('', []);
 
@@ -29,20 +30,22 @@ export class CalculatorPanelsComponent implements OnInit, OnChanges {
 
   usecase: GetValueFromTableUseCase;
 
-  fullTableUseCase : GetTableFromParamsUseCase;
-  customTableUseCase : GetTableFromParamsUseCase;
+  fullTableUseCase: GetTableFromParamsUseCase;
+  customTableUseCase: GetTableFromParamsUseCase;
 
-  isLoadingFullTable : boolean;
+  isLoadingFullTable: boolean;
+  tableFormula: string;
+
+  fullTable: GetTableFromParamsViewModel;
 
   constructor(private _caluclator: ITelephonyCalculator) {
     this.usecase = new GetValueFromTableUseCase(this._caluclator);
-    this.fullTableUseCase = new GetTableFromParamsUseCase(new GetValueFromTableUseCase(this._caluclator));
     this.fullTableUseCase = new GetTableFromParamsUseCase(new GetValueFromTableUseCase(this._caluclator));
   }
 
   ngOnInit() {
     this.executeUseCase();
-    
+
   }
 
   executeUseCase() {
@@ -50,9 +53,7 @@ export class CalculatorPanelsComponent implements OnInit, OnChanges {
       (this.outputType === 'A' ? OutputParam.Traffic :
         (this.outputType === 'N' ? OutputParam.Trunks : null));
 
-    let trafficFormula = this.formula == 'ErlangB' ? ErlangFormula.ErlangB :
-      (this.formula == 'ErlangC' ? ErlangFormula.ErlangC :
-        (this.formula == 'Poisson' ? ErlangFormula.Poisson : null));
+    let trafficFormula = this._getFormulaFromString(this.formula);
 
     if (outputEnum == null || trafficFormula == null) {
       this.outputValue = 'Waiting for your input';
@@ -80,16 +81,9 @@ export class CalculatorPanelsComponent implements OnInit, OnChanges {
       })
   }
 
-  async getFullTable() {
-    this.isLoadingFullTable = true;
-    
-    this.fullTableUseCase.execute(
-      new GetTableFromParamsCommand(
-        ErlangFormula.ErlangB, 
-        [0.01, 0.05, 0.1, 0.5, 1.0, 2, 5, 10, 15, 20, 30, 40], 
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])).then((response) => {
-          this.isLoadingFullTable = false;
-          console.log(response);
-        });
+  private _getFormulaFromString(form: string): ErlangFormula {
+    return form == 'ErlangB' ? ErlangFormula.ErlangB :
+      (form == 'ErlangC' ? ErlangFormula.ErlangC :
+        (form == 'Poisson' ? ErlangFormula.Poisson : null));
   }
 }

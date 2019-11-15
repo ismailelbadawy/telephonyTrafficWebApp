@@ -7,7 +7,6 @@ import { Output } from '@angular/core';
 export class GetValueFromTableUseCase implements UseCase<GetValueFromTableCommand, GetValueFromTableViewModel> {
     
     async execute(params: GetValueFromTableCommand): Promise<GetValueFromTableViewModel> {
-        
         let usedFunction : Function = null;
         switch (params.erlangFormula) {
             case ErlangFormula.ErlangB:
@@ -28,13 +27,20 @@ export class GetValueFromTableUseCase implements UseCase<GetValueFromTableComman
                 return new GetValueFromTableViewModel(params.numberOfTrunks, params.numberOfUsers, params.traffic, gradeOfSerivce);
             default:
             case OutputParam.Traffic:
-                let outputTraffic : number;
-                for(let a = 0; a < 165.0; a += 0.0004){
-                    gradeOfSerivce = await usedFunction(params.numberOfTrunks, a);
-                    if( Math.abs(gradeOfSerivce - params.gradeOfService) < 0.000001) {
-                        outputTraffic = a;
+                let outputTraffic : number = 0.0001;
+                let predictedGoS : number = 0.0;
+                let lastPredictedGoS : number = 0.0;
+                while(true) {
+                    predictedGoS = await usedFunction(params.numberOfTrunks, outputTraffic);
+                    if(predictedGoS > params.gradeOfService && lastPredictedGoS < params.gradeOfService) {
+                        outputTraffic -= 0.00005;
                         break;
                     }
+                    if(params.erlangFormula == ErlangFormula.ErlangC && Math.abs(predictedGoS - params.gradeOfService) <= 0.00001){
+                        break;
+                    }
+                    lastPredictedGoS = predictedGoS;
+                    outputTraffic += 0.0001;
                 }
                 return new GetValueFromTableViewModel(params.numberOfTrunks, params.numberOfUsers, outputTraffic, params.gradeOfService);
             case OutputParam.Trunks:

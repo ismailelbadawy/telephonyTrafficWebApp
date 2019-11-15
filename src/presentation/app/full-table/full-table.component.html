@@ -1,0 +1,25 @@
+<mat-form-field class="standard-form-field drop-down-wide">
+  <mat-label>Choose your traffic formula</mat-label>
+  <mat-select [(value)]="selectedFormula">
+    <mat-option value="ErlangB">Erlang B</mat-option>
+    <mat-option value="ErlangC">Erlang C</mat-option>
+    <mat-option value="Poisson">Poisson</mat-option>
+  </mat-select>
+</mat-form-field>
+<button *ngIf="!isLoadingFullTable" mat-button (click)="this.getFullTable();">Generate Full Table!</button>
+<p *ngIf="isLoadingFullTable">Loading...</p>
+<table cellspacing="20px;" width="100%" *ngIf="!isLoadingFullTable && fullTable != undefined">
+  <tr>
+    <td><strong>Trunks(Erlang) / GoS(%)</strong></td>
+    <td *ngFor="let gos of gosValues"><strong>{{gos}}</strong></td>
+  </tr>
+
+  <tr *ngFor="let row of fullTable.row">
+    <td>
+      <strong>{{fullTable.row.indexOf(row) + 1}}</strong>
+    </td>
+    <td *ngFor="let trafficValue of row.trafficValues">
+      {{trafficValue.toPrecision(4)}}
+    </td>
+  </tr>
+</table>

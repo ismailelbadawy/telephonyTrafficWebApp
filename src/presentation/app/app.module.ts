@@ -10,18 +10,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Material components
 import { MatExpansionModule } from '@angular/material/expansion'; 
 import { MatIconModule } from '@angular/material/icon';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from "@angular/material/input";
-import {MatButtonModule} from '@angular/material/button';
-import {MatSelectModule} from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
 
 import { CalculatorPanelsComponent } from './calculator-panels/calculator-panels.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FullTableComponent } from './full-table/full-table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CalculatorPanelsComponent
+    CalculatorPanelsComponent,
+    FullTableComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +36,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTableModule
   ],
   providers: [
     {
