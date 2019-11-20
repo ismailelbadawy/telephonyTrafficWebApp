@@ -6,6 +6,10 @@ import { GetValueFromTableCommand, OutputParam } from '../get-value-from-table/g
 
 export class GetTableFromParamsUseCase implements UseCase<GetTableFromParamsCommand, GetTableFromParamsViewModel> {
 
+    /**
+     * The execute function just uses two arrays an array of trunk values and an array of gos values 
+     * it terates over both arrays and gets traffic for every possible combinations.
+     */
     execute(params: GetTableFromParamsCommand): Promise<GetTableFromParamsViewModel> {
         console.log('Started calculation');
         return new Promise(async (resolve, reject) => {
