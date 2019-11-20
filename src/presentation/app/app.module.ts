@@ -19,12 +19,14 @@ import { MatTableModule } from '@angular/material/table';
 import { CalculatorPanelsComponent } from './calculator-panels/calculator-panels.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FullTableComponent } from './full-table/full-table.component';
+import { CustomTableComponent } from './custom-table/custom-table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CalculatorPanelsComponent,
-    FullTableComponent
+    FullTableComponent,
+    CustomTableComponent
   ],
   imports: [
     BrowserModule,

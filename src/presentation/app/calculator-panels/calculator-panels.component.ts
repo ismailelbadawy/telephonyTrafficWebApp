@@ -45,31 +45,42 @@ export class CalculatorPanelsComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.executeUseCase();
-
   }
 
+  /**
+   * Gets the value if we can get any value.
+   */
   executeUseCase() {
+    // We get the needed output value from the user selection, converting the string to the enum value.
     let outputEnum: OutputParam = this.outputType === 'GoS' ? OutputParam.GradeOfService :
       (this.outputType === 'A' ? OutputParam.Traffic :
         (this.outputType === 'N' ? OutputParam.Trunks : null));
 
+    // We then gget the formula needed again from the user input.
     let trafficFormula = this._getFormulaFromString(this.formula);
 
+
+    // If any of the traffic formula values or the output are not chosen then the user has not yet added any data, so we stop
     if (outputEnum == null || trafficFormula == null) {
       this.outputValue = 'Waiting for your input';
       return;
     }
+    // Get the number of trunks from the user
     let numberOfTrunks = this.numberOfTrunksFromControl.value;
+    // Get the traffic from the user.
     let traffic = this.trafficFormControl.value;
+    // Get the grade of service from the user.
     let gradeOfService = this.gradeOfServiceFormControl.value / 100;
+    // Execute the usecase by giving it all the needed info in the command.
     this.usecase.execute(new GetValueFromTableCommand(trafficFormula, outputEnum, traffic, numberOfTrunks, null, gradeOfService))
       .then((response) => {
         switch (outputEnum) {
+          // We now give the output string to the user
           case OutputParam.GradeOfService:
             this.outputValue = `GoS : ${response.gradeOfService * 100}%`
             break;
           case OutputParam.Traffic:
-            this.outputValue = `Traffic (A) : ${response.overallTraffic} Erlang`;
+            this.outputValue = `Traffic (A) : ${response.overallTraffic} Erlang which is also ${response.overallTraffic/36} CCS`;
             break;
           case OutputParam.Trunks:
             this.outputValue = `Number of Trunks (N) : ${response.numberOfTrunks} trunk(s)`;

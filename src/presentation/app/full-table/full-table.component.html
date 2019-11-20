@@ -10,7 +10,7 @@
 <p *ngIf="isLoadingFullTable">Loading...</p>
 <table cellspacing="20px;" width="100%" *ngIf="!isLoadingFullTable && fullTable != undefined">
   <tr>
-    <td><strong>Trunks(Erlang) / GoS(%)</strong></td>
+    <td><strong>Trunks/ GoS(%)</strong></td>
     <td *ngFor="let gos of gosValues"><strong>{{gos}}</strong></td>
   </tr>
 

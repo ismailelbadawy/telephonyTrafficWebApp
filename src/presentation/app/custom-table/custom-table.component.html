@@ -1,0 +1,35 @@
+<mat-form-field class="standard-form-field">
+  <input matInput type="text" placeholder="GoS Values" [formControl]='gosFormControl'>
+  <mat-hint>The gos values seperated by a comma <br/> e.g. 0.1, 0.5, 1.0, 1</mat-hint>
+</mat-form-field>
+<br/>
+<mat-form-field class="standard-form-field">
+  <input matInput type="text" placeholder="Trunk Values" [formControl]='trunksFormControl'>
+  <mat-hint>The number of trunks seperated by a comma <br/> e.g. 1, 2, 3, 5, 6</mat-hint>
+</mat-form-field>
+<br/>
+<mat-form-field class="standard-form-field drop-down-wide">
+  <mat-label>Choose your traffic formula</mat-label>
+  <mat-select [(value)]="selectedFormula">
+    <mat-option value="ErlangB">Erlang B</mat-option>
+    <mat-option value="ErlangC">Erlang C</mat-option>
+    <mat-option value="Poisson">Poisson</mat-option>
+  </mat-select>
+</mat-form-field>
+<button *ngIf="!isLoadingTable" mat-button (click)="this.generateTable();">Generate Full Table!</button>
+<p *ngIf="isLoadingTable">Loading...</p>
+<table cellspacing="20px;" width="100%" *ngIf="!isLoadingFullTable && customTable != undefined">
+  <tr>
+    <td><strong>Trunks / GoS(%)</strong></td>
+    <td *ngFor="let gos of gosValues"><strong>{{gos}}</strong></td>
+  </tr>
+
+  <tr *ngFor="let row of customTable.row">
+    <td>
+      <strong>{{trunkValues[customTable.row.indexOf(row)]}}</strong>
+    </td>
+    <td *ngFor="let trafficValue of row.trafficValues">
+      {{trafficValue.toPrecision(4)}}
+    </td>
+  </tr>
+</table>

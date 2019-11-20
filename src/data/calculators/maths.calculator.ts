@@ -36,14 +36,14 @@ export class MathsTelephonyCalculator implements ITelephonyCalculator {
 
     poisson(numberOfTrunks: number, traffic: number): Promise<number> {
         return new Promise((resolve, reject) => {
-            let N = numberOfTrunks;
-            let A = traffic;
-            let factor = (1 - Math.exp(-1 * A));
+            let N : number = numberOfTrunks;
+            let A : number = traffic;
             let summation = 0;
-            for (let i = 0; i <= (N - 1); i++) {
-                summation += (Math.pow(A, i) / MathsTelephonyCalculator._factorial(i));
+            for (let i = 0; i < N; i++) {
+                summation = summation + (Math.pow(A, i)/ MathsTelephonyCalculator._factorial(i));
             }
-            resolve(summation * factor);
+            let output = (1 - (Math.exp(- A) * summation));
+            resolve(output);
         });
     }
 
