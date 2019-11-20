@@ -6,6 +6,11 @@ import { ITelephonyCalculator } from 'src/core/calculators/telephony.calculator'
 })
 export class MathsTelephonyCalculator implements ITelephonyCalculator {
 
+    /**
+     * Calculates the gos value for an erlang B formula.
+     * @param numberOfTrunks N
+     * @param traffic A
+     */
     erlangB(numberOfTrunks: number, traffic: number): Promise<number> {
         return new Promise((resolve, reject) => {
             let N = numberOfTrunks;
@@ -20,6 +25,12 @@ export class MathsTelephonyCalculator implements ITelephonyCalculator {
         })
     }
 
+    /**
+     * According to an ErlangC formula it calculates the gos value
+     * @param numberOfTrunks N
+     * @param traffic A
+     * @returns GoS
+     */
     erlangC(numberOfTrunks: number, traffic: number): Promise<number> {
         return new Promise((resolve, reject) => {
             let N = numberOfTrunks;
@@ -34,6 +45,12 @@ export class MathsTelephonyCalculator implements ITelephonyCalculator {
         });
     }
 
+
+    /**
+     * According to the poisson formula calculates the GoS value
+     * @param numberOfTrunks N
+     * @param traffic A
+     */
     poisson(numberOfTrunks: number, traffic: number): Promise<number> {
         return new Promise((resolve, reject) => {
             let N : number = numberOfTrunks;
@@ -47,6 +64,10 @@ export class MathsTelephonyCalculator implements ITelephonyCalculator {
         });
     }
 
+    /**
+     * A helper function to get the factorial of any integer
+     * @param num Any integer
+     */
     private static _factorial(num: number) {
         var rval = 1;
         for (var i = 2; i <= num; i++) {
